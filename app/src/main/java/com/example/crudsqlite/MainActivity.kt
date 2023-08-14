@@ -63,7 +63,10 @@ class MainActivity : AppCompatActivity() {
         noteAdapter = NoteAdapter(arrayListOf(), object : NoteAdapter.OnAdapterListener{
             override fun onClick(note: Note) {
                 intentEdit( Constant.TYPE_READ, note.id)
+            }
 
+            override fun onUpdate(note: Note) {
+                intentEdit( Constant.TYPE_UPDATE, note.id)
             }
         })
         list_note.apply {
