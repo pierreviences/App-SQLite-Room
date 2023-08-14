@@ -1,5 +1,6 @@
 package com.example.crudsqlite
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -32,6 +33,7 @@ class EditActivity : AppCompatActivity() {
     }
 
     fun setupView(){
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         val intentType = intent.getIntExtra("intent_type", 0)
         when(intentType){
             Constant.TYPE_READ -> {
@@ -52,6 +54,9 @@ class EditActivity : AppCompatActivity() {
                     Note(0, edit_title.text.toString(), edit_note.text.toString())
                 )
                 finish()
+                val intent = Intent(this@EditActivity, MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
             }
         }
 
@@ -67,6 +72,18 @@ class EditActivity : AppCompatActivity() {
                 edit_note.setText(notes.note)
             }
         }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressedDispatcher.onBackPressed()
+        return super.onSupportNavigateUp()
+    }
+
+    override fun onBackPressed() {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+        finish()
     }
 
 
