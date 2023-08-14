@@ -31,6 +31,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart(){
         super.onStart()
+        loadNote()
+
+    }
+    fun loadNote(){
         CoroutineScope(Dispatchers.IO).launch {
             val notes = db.noteDao().getNotes()
             Log.d("MainActivity", "dbResponse: $notes")
@@ -67,6 +71,13 @@ class MainActivity : AppCompatActivity() {
 
             override fun onUpdate(note: Note) {
                 intentEdit( Constant.TYPE_UPDATE, note.id)
+            }
+
+            override fun onDelete(note: Note) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    db.noteDao().deleteNote(note)
+                    loadNote()
+                }
             }
         })
         list_note.apply {

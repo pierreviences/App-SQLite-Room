@@ -34,6 +34,9 @@ class NoteAdapter (private val notes: ArrayList<Note>, private val listener: OnA
         holder.icon_edit.setOnClickListener{
             listener.onUpdate(note)
         }
+        holder.icon_delete.setOnClickListener{
+            listener.onDelete(note)
+        }
     }
 
     fun setData(list: List<Note>){
@@ -45,5 +48,6 @@ class NoteAdapter (private val notes: ArrayList<Note>, private val listener: OnA
     interface OnAdapterListener{
         fun onClick(note:Note)
         fun onUpdate(note: Note)
+        fun onDelete(note: Note)
     }
 }
