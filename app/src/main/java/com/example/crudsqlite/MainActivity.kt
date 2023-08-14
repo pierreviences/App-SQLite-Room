@@ -7,6 +7,8 @@ import android.util.Log
 import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.crudsqlite.room.Constant
+import com.example.crudsqlite.room.Note
 import com.example.crudsqlite.room.NoteDB
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -42,13 +44,28 @@ class MainActivity : AppCompatActivity() {
         button_create = findViewById<Button>(R.id.button_create)
         button_create.setOnClickListener {
             startActivity(Intent(this, EditActivity::class.java))
-
+            intentEdit(Constant.TYPE_CREATE, 0)
         }
+    }
+
+    fun intentEdit( intentType: Int,noteId: Int){
+        startActivity(
+            Intent(
+                applicationContext, EditActivity::class.java)
+                .putExtra("intent_type", intentType)
+                .putExtra("intent_id", noteId)
+
+        )
     }
 
     fun setupRecylerView(){
         list_note = findViewById(R.id.list_note)
-        noteAdapter = NoteAdapter(arrayListOf())
+        noteAdapter = NoteAdapter(arrayListOf(), object : NoteAdapter.OnAdapterListener{
+            override fun onClick(note: Note) {
+                intentEdit( Constant.TYPE_READ, note.id)
+
+            }
+        })
         list_note.apply {
             layoutManager = LinearLayoutManager(applicationContext)
             adapter = noteAdapter

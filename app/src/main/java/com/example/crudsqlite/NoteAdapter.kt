@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.crudsqlite.room.Note
 
-class NoteAdapter (private val notes: ArrayList<Note>) : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
+class NoteAdapter (private val notes: ArrayList<Note>, private val listener: OnAdapterListener) : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
 
     class NoteViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val textTitle: TextView = view.findViewById(R.id.text_title)
@@ -25,11 +25,18 @@ class NoteAdapter (private val notes: ArrayList<Note>) : RecyclerView.Adapter<No
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
         val note = notes[position]
         holder.textTitle.text = note.title
+        holder.textTitle.setOnClickListener{
+            listener.onClick(note)
+        }
     }
 
     fun setData(list: List<Note>){
         notes.clear()
         notes.addAll(list)
         notifyDataSetChanged()
+    }
+
+    interface OnAdapterListener{
+        fun onClick(note:Note)
     }
 }
