@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.crudsqlite.room.Constant
@@ -74,15 +75,31 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onDelete(note: Note) {
-                CoroutineScope(Dispatchers.IO).launch {
-                    db.noteDao().deleteNote(note)
-                    loadNote()
-                }
+                deleteDialog(note)
             }
         })
         list_note.apply {
             layoutManager = LinearLayoutManager(applicationContext)
             adapter = noteAdapter
         }
+    }
+
+    private fun deleteDialog(note: Note){
+        val alertDialog = AlertDialog.Builder(this)
+        alertDialog.apply {
+            setTitle("Konfirmasi")
+            setMessage("Yakin hapus ${note.title}?")
+            setNegativeButton("Batal",){dialogInterface, i ->
+                dialogInterface.dismiss()
+            }
+            setNegativeButton("Hapus",){dialogInterface, i ->
+                dialogInterface.dismiss()
+                CoroutineScope(Dispatchers.IO).launch {
+                    db.noteDao().deleteNote(note)
+                    loadNote()
+                }
+            }
+        }
+        alertDialog.show()
     }
 }
